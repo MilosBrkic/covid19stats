@@ -5,7 +5,7 @@
 
 	//converting datetime to timestamp suitable for javascript
 	foreach ($data as &$row) {		
-		$row['date'] = 1000 * strtotime($row['date']);
+		$row['date'] = strtotime($row['date']);
 	}
 	unset($row);
 	
@@ -19,16 +19,19 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
 	<title>SERBIA COVID 19 STATS</title>
 </head>
 <body>
 	<div class="container">
 	
-	<button onClick="fetch()">FETCH</button>
-	
+		<div class="d-flex justify-content-between">
+			<h3>Data for <?= date('d.m.Y.',$recent['date']) ?></h3>
+			<small class="mt-3">Data usually gets updated at 18:00 </small>	
+		</div>
+		<hr class="mb-1 mt-1">
+
 		<div class="row mb-3">
 			<div class="col-12 col-md-4">
 				<h4>Total cases: <?= $recent['cases'] ?></h4>
@@ -69,19 +72,19 @@
 					<th scope="col">Date</th>
 					<th scope="col">Active</th>
 					<th scope="col">Cases</th>
-					<th scope="col">Cases today</th>
+					<th scope="col">New cases</th>
 					<th scope="col">Deaths</th>
-					<th scope="col">Deaths today</th>
+					<th scope="col">New deaths</th>
 					<th scope="col">Recovered</th>
-					<th scope="col">Recovered today</th>
+					<th scope="col">New recovered</th>
 					<th scope="col">Critical</th>
 					<th scope="col">Tests</th>
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach($data as $row): ?>
+				<?php foreach(array_reverse($data) as $row): ?>
 				<tr>
-					<th scope="row"><?= date('d.m.Y.',$row['date']/1000); ?></th>
+					<th scope="row"><?= date('d.m.Y.',$row['date']); ?></th>
 					<td><?= $row['active'] ?></td>
 					<td><?= $row['cases'] ?></td>
 					<td><?= $row['today_cases'] ?></td>
@@ -101,7 +104,7 @@
 	
 
 <div style="margin-top:16px;color:dimgrey;font-size:9px;font-family: Verdana, Arial, Helvetica, sans-serif;text-decoration:none;">
-	Source: <a href="https://corona.lmao.ninja/" target="_blank" title="JavaScript Multi Series Charts &amp; Graphs ">https://corona.lmao.ninja/</a>
+	Data source: <a href="https://corona.lmao.ninja/" target="_blank" title="JavaScript Multi Series Charts &amp; Graphs ">https://corona.lmao.ninja/</a>
 </div>
 
 
@@ -111,33 +114,26 @@
 
 <script>
 
-	function fetch(){
-		$.ajax({url: "fetch.php", success: function(result){
-    		console.log(result);
-  		}});
-	}
-
-
 	window.onload = function () {
 	
 		var timestamps = <?= json_encode(array_column($data, 'date'), JSON_NUMERIC_CHECK); ?>;
 		//convert PHP timestamps to javascript dates
 		var dates = timestamps.map(element => {
-			return new Intl.DateTimeFormat('en-GB', { month: 'long', day: '2-digit'}).format(element);
+			return new Intl.DateTimeFormat('en-GB', { month: 'long', day: '2-digit'}).format(1000 * element);
 		});
 
 
-		Chart.defaults.global.elements.line.borderWidth = 3;
+		Chart.defaults.global.elements.line.borderWidth = 4;
 		Chart.defaults.global.elements.line.fill = false;	
 		Chart.defaults.global.title.fontSize = 25;
-		Chart.defaults.global.hover.intersect = false;
-		Chart.defaults.global.hover.mode = 'x';
+		Chart.defaults.global.tooltips.intersect = false;
+		Chart.defaults.global.tooltips.mode = 'x';
+	
+		//console.log(Chart.defaults.global);
 
-		console.log(Chart.defaults);
-
-		var ctx = $('#totalChart');
-		var ctx2 = $('#todayChart');
-		var ctxPie = $('#pieChart');
+		var ctx = document.getElementById('totalChart');
+		var ctx2 = document.getElementById('todayChart');
+		var ctxPie = document.getElementById('pieChart');
 
 		const totalChart = new Chart(ctx, {
 			type: 'line',
@@ -246,14 +242,15 @@
 				datasets: [{
 					data: <?= json_encode(array( $recent['active'], $recent['deaths'], $recent['recovered']), JSON_NUMERIC_CHECK); ?>,  
 					backgroundColor: ['red', 'black', 'green']
-				}
-				]
-				
+				}]
 			},
 			options: {
 				title: {
 					display: true,
 					text: '<?= "Total cases: {$recent['cases']}" ?>'
+				},
+				tooltips: {
+					mode: 'nearest',
 				},
 				responsive: true,
 				maintainAspectRatio: false,
