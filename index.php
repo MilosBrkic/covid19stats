@@ -28,7 +28,7 @@
 	
 		<div class="d-flex justify-content-between">
 			<h3>Data for <?= date('d.m.Y.',$recent['date']) ?></h3>
-			<small class="mt-3">Data usually gets updated at 18:00 </small>	
+			<small class="mt-3">Data usually gets updated at 17:00 </small>	
 		</div>
 		<hr class="mb-1 mt-1">
 
