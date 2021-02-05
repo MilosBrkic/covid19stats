@@ -1,6 +1,6 @@
 <?php
 	include('database.php');
-	$result = pg_query($db, "SELECT * FROM stats");
+	$result = pg_query($db, "SELECT * FROM stats ORDER BY date");
 	$data = pg_fetch_all($result);
 
 	//converting datetime to timestamp suitable for javascript
