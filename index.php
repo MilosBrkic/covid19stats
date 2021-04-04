@@ -17,9 +17,8 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+	<link href="style.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
 	<title>SERBIA COVID 19 STATS</title>
 </head>
@@ -65,40 +64,40 @@
 				
 		</div>
 
-	<div class="">
-		<table class="table mt-3">
-			<thead>
-				<tr>
-					<th scope="col">Date</th>
-					<th scope="col">Active</th>
-					<th scope="col">Cases</th>
-					<th scope="col">New cases</th>
-					<th scope="col">Deaths</th>
-					<th scope="col">New deaths</th>
-					<th scope="col">Recovered</th>
-					<th scope="col">New recovered</th>
-					<th scope="col">Critical</th>
-					<th scope="col">Tests</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach(array_reverse($data) as $row): ?>
-				<tr>
-					<th scope="row"><?= date('d.m.Y.',$row['date']); ?></th>
-					<td><?= $row['active'] ?></td>
-					<td><?= $row['cases'] ?></td>
-					<td><?= $row['today_cases'] ?></td>
-					<td><?= $row['deaths'] ?></td>
-					<td><?= $row['today_deaths'] ?></td>
-					<td><?= $row['recovered'] ?></td>
-					<td><?= $row['today_recovered'] ?></td>
-					<td><?= $row['critical'] ?></td>
-					<td><?= $row['tests'] ?></td>
-				</tr>
-				<?php endforeach; ?>	
-			</tbody>
-		</table>
-	</div>
+		<div style="height: 500px; ovetflow: scroll" class="table-responsive">
+			<table class="table mt-3">
+				<thead>
+					<tr  class="sticky">
+						<th scope="col">Date</th>
+						<th scope="col">Active</th>
+						<th scope="col">Cases</th>
+						<th scope="col">New cases</th>
+						<th scope="col">Deaths</th>
+						<th scope="col">New deaths</th>
+						<th scope="col">Recovered</th>
+						<th scope="col">New recovered</th>
+						<th scope="col">Critical</th>
+						<th scope="col">Tests</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach(array_reverse($data) as $row): ?>
+					<tr scope="row">
+						<td><?= date('d.m.Y.',$row['date']); ?></td>
+						<td><?= $row['active'] ?></td>
+						<td><?= $row['cases'] ?></td>
+						<td><?= $row['today_cases'] ?></td>
+						<td><?= $row['deaths'] ?></td>
+						<td><?= $row['today_deaths'] ?></td>
+						<td><?= $row['recovered'] ?></td>
+						<td><?= $row['today_recovered'] ?></td>
+						<td><?= $row['critical'] ?></td>
+						<td><?= $row['tests'] ?></td>
+					</tr>
+					<?php endforeach; ?>	
+				</tbody>
+			</table>
+		</div>
 
 	</div> 			
 	

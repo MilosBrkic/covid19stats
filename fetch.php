@@ -7,8 +7,14 @@ $response = json_decode($response);
 $result = pg_query($db, "SELECT MAX(date) as date FROM stats");
 $maxDate = pg_fetch_all($result);
 
-echo date('H');
-if(time() - strtotime($maxDate[0]['date']) > 80000 && 16 <= date('H') && date('H') <= 20 ){
+
+if(time() - strtotime($maxDate[0]['date']) > 80000 && 16 <= date('H') && date('H') <= 20){
+
+	if($response->todayCases == 0){
+		echo "Data has not been updated!";
+		return;
+	}
+	
 
 	$res = pg_insert($db, 'stats', [
 		'cases' => $response->cases,
@@ -27,7 +33,7 @@ if(time() - strtotime($maxDate[0]['date']) > 80000 && 16 <= date('H') && date('H
 		echo "Error\n";
 	}
 }
-else echo "Data can be fected once per day between 16h and 20h";
+else echo "Data can be fetchted once per day between 16h and 20h";
 	
 
 	
