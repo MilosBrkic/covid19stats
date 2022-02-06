@@ -1,10 +1,25 @@
-th {
-    position: sticky;
-    top: 0;
-    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
-  }
-
-
 tr.sticky th {
     background: white;
+}
+
+th {
+  width: 10%;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+  border-bottom-width: 0 !important;
+}
+
+tbody {
+  display: block;
+  max-height: 500px;
+  overflow-y: auto;
+}
+thead, tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+table {
+  min-width: 900px;
+  overflow-x: auto;
 }

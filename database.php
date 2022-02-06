@@ -1,4 +1,5 @@
 <?php
+include('local.php');
 
 $databaseURL = getenv('DATABASE_URL');
 

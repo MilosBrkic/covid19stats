@@ -64,7 +64,7 @@
 				
 		</div>
 
-		<div style="height: 500px; ovetflow: scroll" class="table-responsive">
+		<div class="table-responsive">
 			<table class="table mt-3">
 				<thead>
 					<tr  class="sticky">
@@ -78,6 +78,7 @@
 						<th scope="col">New recovered</th>
 						<th scope="col">Critical</th>
 						<th scope="col">Tests</th>
+						<th scope="col" style="width: 6px"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -118,12 +119,13 @@
 		var timestamps = <?= json_encode(array_column($data, 'date'), JSON_NUMERIC_CHECK); ?>;
 		//convert PHP timestamps to javascript dates
 		var dates = timestamps.map(element => {
-			return new Intl.DateTimeFormat('en-GB', { month: 'long', day: '2-digit'}).format(1000 * element);
+			return new Intl.DateTimeFormat('en-GB', { month: 'short', day: '2-digit'}).format(1000 * element);
 		});
 
 
-		Chart.defaults.global.elements.line.borderWidth = 4;
+		Chart.defaults.global.elements.line.borderWidth = 3;
 		Chart.defaults.global.elements.line.fill = false;	
+		Chart.defaults.global.elements.point.radius = 0;
 		Chart.defaults.global.title.fontSize = 25;
 		Chart.defaults.global.tooltips.intersect = false;
 		Chart.defaults.global.tooltips.mode = 'x';
@@ -174,6 +176,12 @@
 					text: 'Total:',
 				},
 				scales: {
+					xAxes: [{
+						ticks: {
+							autoSkip: true,
+							maxRotation : 20,
+						}
+					}],
 					yAxes: [{
 						ticks: {
 							beginAtZero: false
@@ -219,6 +227,12 @@
 					text: 'Daily:'
 				},
 				scales: {
+					xAxes: [{
+						ticks: {
+							autoSkip: true,
+							maxRotation : 20,
+						}
+					}],
 					yAxes: [{
 						ticks: {
 							beginAtZero: false,
